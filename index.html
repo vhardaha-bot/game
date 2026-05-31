@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐍 सांप सीढ़ी | vhoriginal.com</title>
+<meta name="description" content="Online Saanp Seedhi game - vs Computer ya Dost ke saath khelo!">
+<meta name="theme-color" content="#1a0a2e">
+<meta property="og:title" content="🐍 सांप सीढ़ी खेलो - Online!">
+<meta property="og:description" content="Computer ya Dost ke saath Saanp Seedhi khelo - bilkul free!">
+<meta property="og:image" content="https://game.vhoriginal.com/preview.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐍</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f0820; --card:#1e1040; --card2:#160c30;
+  --border:#3d2080; --text:#f0e8ff; --muted:#9080c0;
+  --white:#ffffff;
+  /* Row colors */
+  --r1:#ff6b6b; --r2:#ff9f43; --r3:#ffd32a; --r4:#0be881;
+  --r5:#00d2d3; --r6:#54a0ff; --r7:#a29bfe; --r8:#fd79a8;
+  --r9:#6c5ce7; --r10:#00b894;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:'Noto Sans Devanagari','Baloo 2',sans-serif;
+  min-height:100vh;overflow-x:hidden;font-size:16px;
+}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 0%,rgba(108,92,231,0.18) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 100%,rgba(253,121,168,0.12) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%,rgba(0,210,211,0.06) 0%,transparent 70%);
+}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.star{position:absolute;border-radius:50%;background:#fff;opacity:0;animation:twinkle var(--d) var(--delay) infinite;}
+@keyframes twinkle{0%,100%{opacity:0}50%{opacity:var(--op)}}
+
+.wrap{position:relative;z-index:1;max-width:520px;margin:0 auto;padding:10px 10px 40px;}
+
+/* ── HEADER ── */
+.hdr{text-align:center;padding:14px 8px 8px;}
+.hdr-emoji{font-size:56px;display:block;filter:drop-shadow(0 0 16px rgba(253,121,168,0.6));animation:bounce 2s ease-in-out infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hdr-title{
+  font-size:clamp(28px,8vw,40px);font-weight:900;
+  background:linear-gradient(135deg,#ffd32a,#ff6b6b,#a29bfe,#00d2d3);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:2px;line-height:1.1;
+}
+.hdr-sub{font-size:14px;color:var(--muted);letter-spacing:1px;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(162,155,254,0.4),transparent);margin:10px 0;}
+
+/* ── HOME ── */
+#homeScreen{animation:fadeUp 0.4s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0;}
+.mode-card{
+  border-radius:18px;padding:18px 12px;text-align:center;
+  cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden;
+  border:2px solid transparent;
+}
+.mode-card.bot{
+  background:linear-gradient(135deg,#0d3b2e,#0a4d3a);
+  border-color:rgba(0,190,130,0.5);
+}
+.mode-card.friend{
+  background:linear-gradient(135deg,#2d1060,#3d1880);
+  border-color:rgba(162,155,254,0.5);
+}
+.mode-card:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,0.4);}
+.mode-card:active{transform:scale(0.97);}
+.mc-icon{font-size:42px;display:block;margin-bottom:8px;}
+.mc-title{font-size:18px;font-weight:800;color:#fff;margin-bottom:4px;}
+.mc-desc{font-size:12px;color:rgba(255,255,255,0.6);line-height:1.4;}
+.mc-badge{display:inline-block;margin-top:7px;padding:4px 12px;border-radius:12px;font-size:12px;font-weight:700;}
+.badge-green{background:rgba(0,190,130,0.2);color:#00d2d3;border:1px solid rgba(0,210,211,0.4);}
+.badge-purple{background:rgba(162,155,254,0.2);color:#a29bfe;border:1px solid rgba(162,155,254,0.4);}
+
+/* FRIEND SECTION */
+#friendSection{display:none;margin-top:10px;}
+.room-card{
+  background:linear-gradient(135deg,#1e0d40,#2d1565);
+  border:1.5px solid rgba(162,155,254,0.35);
+  border-radius:16px;padding:16px;margin-bottom:10px;
+}
+.room-title{
+  font-size:16px;font-weight:700;
+  background:linear-gradient(135deg,#a29bfe,#fd79a8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:12px;text-align:center;
+}
+.room-input{
+  width:100%;padding:13px 14px;
+  background:rgba(255,255,255,0.07);
+  border:1.5px solid rgba(162,155,254,0.3);
+  color:#fff;border-radius:10px;font-size:20px;
+  font-family:inherit;outline:none;text-align:center;
+  letter-spacing:6px;text-transform:uppercase;margin-bottom:10px;
+  transition:border-color 0.2s;font-weight:800;
+}
+.room-input:focus{border-color:#a29bfe;}
+.room-input::placeholder{letter-spacing:0;font-size:14px;color:rgba(255,255,255,0.3);font-weight:400;}
+
+/* BUTTONS */
+.btn{
+  width:100%;padding:14px;border:none;border-radius:12px;
+  font-size:17px;font-weight:800;cursor:pointer;font-family:inherit;
+  transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.btn:hover{transform:translateY(-2px);}
+.btn:active{transform:scale(0.97);}
+.btn-green{background:linear-gradient(135deg,#00b894,#00d2d3);color:#0a2010;box-shadow:0 4px 16px rgba(0,210,211,0.35);}
+.btn-purple{background:linear-gradient(135deg,#6c5ce7,#a29bfe);color:#fff;box-shadow:0 4px 16px rgba(108,92,231,0.4);}
+.btn-gold{background:linear-gradient(135deg,#f9ca24,#ffd32a);color:#1a0a00;box-shadow:0 4px 16px rgba(255,211,42,0.35);}
+.btn-red{background:linear-gradient(135deg,#d63031,#ff6b6b);color:#fff;}
+.btn-wa{background:linear-gradient(135deg,#128c7e,#25d366);color:#fff;box-shadow:0 4px 16px rgba(37,211,102,0.3);}
+.btn-sm{width:auto;padding:9px 18px;font-size:14px;border-radius:10px;}
+.or-text{text-align:center;font-size:13px;color:var(--muted);margin:4px 0 8px;}
+
+/* EXIT button + confirm modal */
+.exit-row{text-align:right;margin-top:8px;}
+.exit-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  background:transparent;color:#ff7a85;
+  border:1.5px solid rgba(255,107,107,0.5);
+  border-radius:999px;padding:7px 16px;
+  font-size:13px;font-weight:700;font-family:inherit;
+  cursor:pointer;transition:all 0.2s;
+}
+.exit-btn:hover{background:rgba(255,107,107,0.12);border-color:rgba(255,107,107,0.85);}
+.exit-btn:active{transform:scale(0.95);}
+.modal-overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(8,4,18,0.78);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:24px;
+}
+.modal-overlay.show{display:flex;animation:fadeIn 0.2s ease;}
+.modal-card{
+  background:linear-gradient(135deg,#1e1040,#160c30);
+  border:1.5px solid rgba(162,155,254,0.4);
+  border-radius:20px;padding:24px 20px;max-width:340px;width:100%;
+  text-align:center;box-shadow:0 22px 60px rgba(0,0,0,0.6);
+  animation:popIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+.modal-title{font-size:21px;font-weight:900;color:#fff;margin-bottom:8px;}
+.modal-sub{font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;}
+.modal-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-no{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.18);}
+.modal-yes{background:linear-gradient(135deg,#d63031,#ff6b6b);color:#fff;box-shadow:0 4px 14px rgba(214,48,49,0.35);}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{0%{transform:scale(0.82);opacity:0}100%{transform:scale(1);opacity:1}}
+
+/* WAITING */
+#waitingScreen{display:none;text-align:center;padding:16px 12px;animation:fadeUp 0.4s ease;}
+.room-code-box{
+  background:linear-gradient(135deg,rgba(108,92,231,0.2),rgba(253,121,168,0.15));
+  border:2px solid rgba(162,155,254,0.5);
+  border-radius:20px;padding:22px 16px;margin:14px 0;
+}
+.rc-label{font-size:14px;color:var(--muted);margin-bottom:6px;}
+.rc-code{
+  font-size:clamp(44px,12vw,60px);font-weight:900;
+  letter-spacing:10px;
+  background:linear-gradient(135deg,#ffd32a,#ff9f43,#ff6b6b);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  font-family:'Baloo 2',sans-serif;
+}
+.rc-hint{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6;}
+.waiting-dots{font-size:32px;margin:10px 0;animation:pulse 1.5s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
+
+/* ── GAME SCREEN ── */
+#gameScreen{display:none;}
+.players-bar{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;margin-bottom:10px;}
+.player-info{
+  border-radius:14px;padding:10px 8px;text-align:center;
+  background:var(--card);border:2px solid var(--border);
+  transition:all 0.3s;
+}
+.player-info.active{
+  border-color:#ffd32a;
+  box-shadow:0 0 18px rgba(255,211,42,0.3);
+  background:rgba(255,211,42,0.07);
+}
+.pi-emoji{font-size:26px;display:block;margin-bottom:3px;}
+.pi-name{font-size:14px;font-weight:800;color:#fff;}
+.pi-pos{font-size:11px;color:var(--muted);margin-top:2px;}
+.vs-text{font-size:16px;font-weight:800;color:var(--muted);text-align:center;}
+
+/* ── BOARD ── */
+.board-wrap{
+  border-radius:16px;overflow:hidden;
+  border:1.5px solid rgba(162,155,254,0.25);
+  margin-bottom:10px;
+  position:relative;
+  box-shadow:0 12px 32px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.3);
+}
+.board-grid{
+  display:grid;grid-template-columns:repeat(10,1fr);
+  gap:0;position:relative;
+}
+.board-svg{
+  position:absolute;inset:0;width:100%;height:100%;
+  pointer-events:none;z-index:3;overflow:visible;
+}
+.cell{
+  aspect-ratio:1;
+  position:relative;cursor:default;
+  border:0.5px solid rgba(255,255,255,0.06);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.07);
+}
+/* Row colors — harmonized vertical spectrum (top row 1 = violet → bottom row 10 = rose) */
+.cell[data-row="1"]{background:linear-gradient(160deg,rgba(139,92,246,0.58),rgba(139,92,246,0.50));}
+.cell[data-row="2"]{background:linear-gradient(160deg,rgba(99,102,241,0.58),rgba(99,102,241,0.50));}
+.cell[data-row="3"]{background:linear-gradient(160deg,rgba(59,130,246,0.58),rgba(59,130,246,0.50));}
+.cell[data-row="4"]{background:linear-gradient(160deg,rgba(14,165,233,0.58),rgba(14,165,233,0.50));}
+.cell[data-row="5"]{background:linear-gradient(160deg,rgba(20,184,166,0.58),rgba(20,184,166,0.50));}
+.cell[data-row="6"]{background:linear-gradient(160deg,rgba(16,185,129,0.58),rgba(16,185,129,0.50));}
+.cell[data-row="7"]{background:linear-gradient(160deg,rgba(132,204,22,0.58),rgba(132,204,22,0.50));}
+.cell[data-row="8"]{background:linear-gradient(160deg,rgba(245,158,11,0.58),rgba(245,158,11,0.50));}
+.cell[data-row="9"]{background:linear-gradient(160deg,rgba(249,115,22,0.58),rgba(249,115,22,0.50));}
+.cell[data-row="10"]{background:linear-gradient(160deg,rgba(251,90,126,0.58),rgba(251,90,126,0.50));}
+/* Alternate (checker) cells — softer */
+.cell.alt[data-row="1"]{background:linear-gradient(160deg,rgba(139,92,246,0.38),rgba(139,92,246,0.32));}
+.cell.alt[data-row="2"]{background:linear-gradient(160deg,rgba(99,102,241,0.38),rgba(99,102,241,0.32));}
+.cell.alt[data-row="3"]{background:linear-gradient(160deg,rgba(59,130,246,0.38),rgba(59,130,246,0.32));}
+.cell.alt[data-row="4"]{background:linear-gradient(160deg,rgba(14,165,233,0.38),rgba(14,165,233,0.32));}
+.cell.alt[data-row="5"]{background:linear-gradient(160deg,rgba(20,184,166,0.38),rgba(20,184,166,0.32));}
+.cell.alt[data-row="6"]{background:linear-gradient(160deg,rgba(16,185,129,0.38),rgba(16,185,129,0.32));}
+.cell.alt[data-row="7"]{background:linear-gradient(160deg,rgba(132,204,22,0.38),rgba(132,204,22,0.32));}
+.cell.alt[data-row="8"]{background:linear-gradient(160deg,rgba(245,158,11,0.38),rgba(245,158,11,0.32));}
+.cell.alt[data-row="9"]{background:linear-gradient(160deg,rgba(249,115,22,0.38),rgba(249,115,22,0.32));}
+.cell.alt[data-row="10"]{background:linear-gradient(160deg,rgba(251,90,126,0.38),rgba(251,90,126,0.32));}
+
+.cell-num{
+  position:absolute;top:2px;left:3px;
+  font-size:clamp(8px,2vw,12px);
+  font-weight:800;color:#ffffff;
+  line-height:1;z-index:2;
+  text-shadow:0 1px 2px rgba(0,0,0,0.9),0 0 3px rgba(0,0,0,0.65);
+}
+/* Vignette — darkens only the tile fills toward the edges (sits BELOW numbers, snakes, ladders, tokens) */
+.board-vignette{
+  position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse 78% 78% at 50% 50%,transparent 52%,rgba(0,0,0,0.30) 100%);
+}
+.token{
+  width:clamp(15px,4vw,23px);height:clamp(15px,4vw,23px);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:clamp(7px,1.8vw,11px);
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  z-index:10;
+  border:1px solid rgba(255,255,255,0.35);
+  box-shadow:0 2px 7px rgba(0,0,0,0.55),inset 0 -2px 4px rgba(0,0,0,0.25);
+  animation:tokenPop 0.38s cubic-bezier(0.34,1.56,0.64,1);
+}
+.token::after{
+  content:'';position:absolute;top:15%;left:22%;
+  width:36%;height:30%;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,0.95),rgba(255,255,255,0));
+  pointer-events:none;
+}
+@keyframes tokenPop{
+  0%{transform:translate(-50%,-50%) scale(0.3);opacity:0}
+  55%{transform:translate(-50%,-50%) scale(1.22);opacity:1}
+  100%{transform:translate(-50%,-50%) scale(1);opacity:1}
+}
+.token.p1{background:radial-gradient(circle at 34% 30%,#fff7d6,#ffd32a 48%,#f59e0b 100%);}
+.token.p2{background:radial-gradient(circle at 34% 30%,#ffffff,#c4b5fd 32%,#a855f7 68%,#ec4899 100%);}
+.token.both{background:radial-gradient(circle at 34% 30%,#ffffff,#ffd32a 35%,#a855f7 75%,#ec4899 100%);}
+
+/* CONTROLS */
+.controls{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.dice-wrap{
+  flex-shrink:0;
+  width:clamp(68px,17vw,84px);height:clamp(68px,17vw,84px);
+  background:linear-gradient(135deg,#1e0d40,#2d1565);
+  border:2px solid var(--border);border-radius:16px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:clamp(34px,8.5vw,44px);cursor:pointer;
+  transition:all 0.2s;box-shadow:0 4px 16px rgba(0,0,0,0.3);
+}
+.dice-wrap.active{
+  border-color:#ffd32a;
+  box-shadow:0 0 22px rgba(255,211,42,0.4);
+  cursor:pointer;
+}
+.dice-wrap.disabled{opacity:0.4;cursor:not-allowed;}
+.dice-wrap.rolling{animation:diceRoll 0.6s ease;}
+@keyframes diceRoll{
+  0%{transform:rotate(0) scale(1)}
+  25%{transform:rotate(-18deg) scale(1.12)}
+  50%{transform:rotate(12deg) scale(0.93)}
+  75%{transform:rotate(-6deg) scale(1.06)}
+  100%{transform:rotate(0) scale(1)}
+}
+.dice-hint{font-size:11px;color:#ffd32a;font-weight:700;margin-top:2px;}
+.game-info{flex:1;}
+.gi-turn{font-size:16px;font-weight:800;color:#fff;margin-bottom:4px;}
+.gi-msg{font-size:13px;color:var(--muted);line-height:1.5;min-height:38px;}
+.gi-msg.snake-msg{color:#ff6b6b;font-weight:700;}
+.gi-msg.ladder-msg{color:#00d2d3;font-weight:700;}
+
+/* LOG */
+.log-wrap{
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+  border-radius:10px;padding:8px 10px;margin-bottom:8px;
+  max-height:70px;overflow-y:auto;
+}
+.log-item{font-size:12px;color:var(--muted);padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.log-item:last-child{border:none;color:var(--text);}
+
+/* WIN */
+#winScreen{display:none;text-align:center;padding:16px 12px;animation:fadeUp 0.5s ease;}
+.win-emoji{font-size:76px;display:block;animation:winPop 0.7s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes winPop{0%{transform:scale(0) rotate(-20deg)}60%{transform:scale(1.2) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+.win-title{
+  font-size:clamp(26px,7vw,36px);font-weight:900;
+  background:linear-gradient(135deg,#ffd32a,#ff6b6b,#a29bfe);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin:10px 0 5px;
+}
+.win-sub{font-size:15px;color:var(--muted);margin-bottom:18px;}
+
+/* MSG */
+.msg-box{padding:10px 14px;border-radius:10px;font-size:14px;margin-top:8px;display:none;}
+.msg-err{background:rgba(255,107,107,0.12);border:1px solid rgba(255,107,107,0.3);color:#ff6b6b;}
+.msg-ok{background:rgba(0,210,211,0.1);border:1px solid rgba(0,210,211,0.3);color:#00d2d3;}
+.msg-info{background:rgba(162,155,254,0.1);border:1px solid rgba(162,155,254,0.3);color:#a29bfe;}
+
+/* FOOTER */
+.footer{text-align:center;padding:14px 10px 6px;border-top:1px solid var(--border);margin-top:10px;font-size:12px;color:var(--muted);line-height:2;}
+.install-hint{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:6px;padding:9px 14px;
+  background:linear-gradient(135deg,rgba(108,92,231,0.2),rgba(253,121,168,0.15));
+  border:1px solid rgba(162,155,254,0.35);
+  border-radius:10px;font-size:13px;
+  color:#a29bfe;font-weight:600;
+}
+
+@media(max-width:360px){
+  .cell-num{font-size:8px;}
+  .token{width:12px;height:12px;}
+}
+</style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="wrap">
+
+<!-- HEADER -->
+<div class="hdr">
+  <span class="hdr-emoji">🐍</span>
+  <div class="hdr-title">सांप सीढ़ी</div>
+  <div class="hdr-sub">Classic Indian Board Game</div>
+</div>
+
+<!-- HOME -->
+<div id="homeScreen">
+  <div class="mode-cards">
+    <div class="mode-card bot" onclick="startVsBot()">
+      <span class="mc-icon">🤖</span>
+      <div class="mc-title">कंप्यूटर</div>
+      <div class="mc-desc">अकेले खेलो कंप्यूटर के साथ</div>
+      <span class="mc-badge badge-green">सीधे शुरू</span>
+    </div>
+    <div class="mode-card friend" onclick="showFriendSection()">
+      <span class="mc-icon">👥</span>
+      <div class="mc-title">दोस्त के साथ</div>
+      <div class="mc-desc">Online — Room कोड से जुड़ो</div>
+      <span class="mc-badge badge-purple">Multiplayer</span>
+    </div>
+  </div>
+
+  <div id="friendSection">
+    <div class="room-card">
+      <div class="room-title">🏠 नया Room बनाओ</div>
+      <button class="btn btn-purple" onclick="createRoom()">✨ Room बनाओ</button>
+    </div>
+    <div class="or-text">— या —</div>
+    <div class="room-card">
+      <div class="room-title">🔑 Room जॉइन करो</div>
+      <input class="room-input" id="roomCodeInput" placeholder="Room Code डालो" maxlength="4"/>
+      <button class="btn btn-green" onclick="joinRoom()">🚀 जॉइन करो</button>
+    </div>
+    <div class="msg-box" id="friendMsg"></div>
+    <div class="divider"></div>
+    <button class="btn btn-red" onclick="hideFriendSection()">✕ वापस जाओ</button>
+  </div>
+</div>
+
+<!-- WAITING -->
+<div id="waitingScreen">
+  <div class="room-code-box">
+    <div class="rc-label">Room Code</div>
+    <div class="rc-code" id="displayRoomCode">----</div>
+    <div class="rc-hint">यह कोड अपने दोस्त को भेजो<br>दोस्त इस कोड से जुड़ेगा</div>
+  </div>
+  <button class="btn btn-wa" style="margin-bottom:10px" onclick="shareRoom()">📱 WhatsApp पर भेजो</button>
+  <div class="waiting-dots">⏳</div>
+  <div style="font-size:15px;color:var(--muted);margin-bottom:14px;">दोस्त का इंतज़ार है...</div>
+  <button class="btn btn-red btn-sm" onclick="cancelWaiting()">❌ रद्द करो</button>
+</div>
+
+<!-- GAME -->
+<div id="gameScreen">
+  <div class="players-bar">
+    <div class="player-info active" id="p1Info">
+      <span class="pi-emoji">🟡</span>
+      <div class="pi-name" id="p1Name">आप</div>
+      <div class="pi-pos" id="p1Pos">घर 🏠</div>
+    </div>
+    <div class="vs-text">VS</div>
+    <div class="player-info" id="p2Info">
+      <span class="pi-emoji">🟣</span>
+      <div class="pi-name" id="p2Name">कंप्यूटर</div>
+      <div class="pi-pos" id="p2Pos">घर 🏠</div>
+    </div>
+  </div>
+
+  <div class="board-wrap">
+    <div style="position:relative;">
+      <div class="board-grid" id="boardGrid"></div>
+      <div class="board-vignette"></div>
+      <svg class="board-svg" id="boardSvg" viewBox="0 0 100 100" preserveAspectRatio="none"></svg>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="dice-wrap active" id="diceWrap" onclick="rollDice()">
+      <span id="diceEmoji">🎲</span>
+      <span class="dice-hint" id="diceHint">दबाओ</span>
+    </div>
+    <div class="game-info">
+      <div class="gi-turn" id="turnText">आपकी बारी!</div>
+      <div class="gi-msg" id="gameMsg">पासा फेंको...</div>
+    </div>
+  </div>
+
+  <div class="log-wrap" id="gameLog"></div>
+  <div class="exit-row">
+    <button class="exit-btn" onclick="askExit()">✕ Exit</button>
+  </div>
+</div>
+
+<!-- WIN -->
+<div id="winScreen">
+  <span class="win-emoji" id="winEmoji">🏆</span>
+  <div class="win-title" id="winTitle">जीत गए!</div>
+  <div class="win-sub" id="winSub"></div>
+  <button class="btn btn-gold" style="margin-bottom:10px" onclick="playAgain()">🔄 फिर खेलो</button>
+  <button class="btn btn-wa" onclick="shareWin()">📱 जीत शेयर करो</button>
+</div>
+
+<!-- FOOTER -->
+<div class="footer" id="pgFooter">
+  🐍 सांप सीढ़ी | vhoriginal.com
+  <div class="install-hint">📱 App की तरह Install करें — Chrome में ⋮ दबाओ → "Add to Home Screen" | No Ads</div>
+  <div style="margin-top:6px;">
+    <a href="https://lucky-number.vhoriginal.com" target="_blank" rel="noopener" style="color:#ffd32a;text-decoration:none;font-weight:700;">🔮 Lucky Number भी देखें →</a>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- EXIT CONFIRM -->
+<div class="modal-overlay" id="exitModal">
+  <div class="modal-card">
+    <div class="modal-title">खेल छोड़ें?</div>
+    <div class="modal-sub">अभी की प्रोग्रेस सेव नहीं होगी।</div>
+    <div class="modal-btns">
+      <button class="btn modal-no" onclick="closeExit()">नहीं</button>
+      <button class="btn modal-yes" onclick="confirmExit()">हाँ, बाहर</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBc_atlEbVUV2HnrR4huuLXL74QikFtJeQ",
+  authDomain: "saanp-seedhi-cbf12.firebaseapp.com",
+  databaseURL: "https://saanp-seedhi-cbf12-default-rtdb.firebaseio.com",
+  projectId: "saanp-seedhi-cbf12",
+  storageBucket: "saanp-seedhi-cbf12.firebasestorage.app",
+  messagingSenderId: "494597522399",
+  appId: "1:494597522399:web:0bc792f60d995cd169fa6a"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ── BOARD DATA ──
+const SNAKES  = {16:6, 47:26, 49:11, 56:53, 62:19, 64:60, 87:24, 93:73, 95:75, 98:78};
+const LADDERS = {1:38, 4:14, 9:31, 20:38, 28:84, 40:59, 51:67, 63:81, 71:91};
+const DICE_FACES = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+
+// ── STATE ──
+let gameMode=null, myRole=null, roomCode=null, roomRef=null;
+let gameState=null, isMyTurn=false, diceRolling=false, gameUnsubscribe=null;
+
+// ── STARS ──
+(function(){
+  const s=document.getElementById('stars');
+  for(let i=0;i<55;i++){
+    const el=document.createElement('div');
+    el.className='star';
+    const sz=Math.random()*2.2+0.4;
+    el.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*5}s;--delay:${Math.random()*6}s;--op:${0.1+Math.random()*0.5};`;
+    s.appendChild(el);
+  }
+})();
+
+// ── CELL POSITION helper ──
+// Returns center {x, y} in SVG viewBox (0–100) for a given cell number
+function cellCenter(num){
+  // board row from top (0=top)
+  const row = Math.floor((num-1)/10); // 0-9, 0=bottom logically
+  // actual top row index: row 9 = cells 91-100 (displayed at top)
+  const topRow = 9 - row; // 0 = top display row
+  const col = (num-1) % 10;
+  const displayCol = (row % 2 === 0) ? (9 - col) : col; // snake pattern
+  const cellW = 10, cellH = 10;
+  const cx = displayCol * cellW + cellW/2;
+  const cy = topRow * cellH + cellH/2;
+  return {x: cx, y: cy};
+}
+
+// ── BUILD BOARD ──
+function buildBoard(){
+  const grid = document.getElementById('boardGrid');
+  const svg  = document.getElementById('boardSvg');
+  grid.innerHTML='';
+  svg.innerHTML='';
+
+  // Cells
+  for(let row=9; row>=0; row--){
+    for(let col=0; col<10; col++){
+      const num = row%2===0 ? row*10+(9-col)+1 : row*10+col+1;
+      const cell = document.createElement('div');
+      const rowNum = 10 - row; // 1-10 for CSS
+      cell.className = 'cell' + ((col+row)%2===0?' alt':'');
+      cell.dataset.row = rowNum;
+      cell.id = 'cell-'+num;
+      cell.innerHTML = `<span class="cell-num">${num}</span>`;
+      grid.appendChild(cell);
+    }
+  }
+
+  // Draw LADDERS first, then SNAKES on top
+  const defs = svgNode('defs', {});
+  svg.appendChild(defs);
+  let gid = 0;
+  for(const [from, to] of Object.entries(LADDERS)){
+    drawLadder(svg, defs, cellCenter(parseInt(from)), cellCenter(parseInt(to)), gid++);
+  }
+  for(const [from, to] of Object.entries(SNAKES)){
+    drawSnake(svg, defs, cellCenter(parseInt(from)), cellCenter(parseInt(to)), gid++);
+  }
+}
+
+// ── SVG helpers ──
+const SVG_NS = 'http://www.w3.org/2000/svg';
+function svgNode(tag, attrs){
+  const el = document.createElementNS(SVG_NS, tag);
+  for(const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+
+// 3D bamboo-style ladder (old-WebView safe: solid colors + *-opacity attrs)
+function drawLadder(svg, defs, f, t, gid){
+  const dx=t.x-f.x, dy=t.y-f.y;
+  const len=Math.hypot(dx,dy)||1;
+  const ux=dx/len, uy=dy/len;     // unit along
+  const nx=-uy, ny=ux;            // unit normal
+  const halfW=1.25;               // half rail spacing
+
+  // rail endpoints (L = +normal side, R = -normal side)
+  const Lx1=f.x+nx*halfW, Ly1=f.y+ny*halfW, Lx2=t.x+nx*halfW, Ly2=t.y+ny*halfW;
+  const Rx1=f.x-nx*halfW, Ry1=f.y-ny*halfW, Rx2=t.x-nx*halfW, Ry2=t.y-ny*halfW;
+
+  // gradient mint -> green along the ladder
+  const g=svgNode('linearGradient',{id:'lad'+gid,gradientUnits:'userSpaceOnUse',x1:f.x,y1:f.y,x2:t.x,y2:t.y});
+  g.appendChild(svgNode('stop',{offset:'0','stop-color':'#86efac'}));
+  g.appendChild(svgNode('stop',{offset:'1','stop-color':'#16a34a'}));
+  defs.appendChild(g);
+
+  // glow underlay
+  [[Lx1,Ly1,Lx2,Ly2],[Rx1,Ry1,Rx2,Ry2]].forEach(c=>{
+    svg.appendChild(svgNode('line',{x1:c[0],y1:c[1],x2:c[2],y2:c[3],stroke:'#4ade80','stroke-width':'2.4','stroke-opacity':'0.18','stroke-linecap':'round'}));
+  });
+
+  // rungs (distance-spaced) — shadow + main + highlight
+  const rungs=Math.max(3,Math.min(8,Math.round(len/3.2)));
+  for(let i=1;i<=rungs;i++){
+    const s=i/(rungs+1);
+    const cx=f.x+dx*s, cy=f.y+dy*s;
+    const ax1=cx+nx*halfW, ay1=cy+ny*halfW;
+    const ax2=cx-nx*halfW, ay2=cy-ny*halfW;
+    svg.appendChild(svgNode('line',{x1:ax1+ux*0.18,y1:ay1+uy*0.18,x2:ax2+ux*0.18,y2:ay2+uy*0.18,stroke:'#14532d','stroke-width':'0.7','stroke-opacity':'0.5','stroke-linecap':'round'}));
+    svg.appendChild(svgNode('line',{x1:ax1,y1:ay1,x2:ax2,y2:ay2,stroke:'#bbf7d0','stroke-width':'0.8','stroke-linecap':'round'}));
+    svg.appendChild(svgNode('line',{x1:ax1-ux*0.16,y1:ay1-uy*0.16,x2:ax2-ux*0.16,y2:ay2-uy*0.16,stroke:'#f0fdf4','stroke-width':'0.28','stroke-opacity':'0.8','stroke-linecap':'round'}));
+  }
+
+  // rails (gradient) + thin white edge highlight
+  [[Lx1,Ly1,Lx2,Ly2],[Rx1,Ry1,Rx2,Ry2]].forEach(c=>{
+    svg.appendChild(svgNode('line',{x1:c[0],y1:c[1],x2:c[2],y2:c[3],stroke:'url(#lad'+gid+')','stroke-width':'0.95','stroke-linecap':'round'}));
+    svg.appendChild(svgNode('line',{x1:c[0]+nx*0.28,y1:c[1]+ny*0.28,x2:c[2]+nx*0.28,y2:c[3]+ny*0.28,stroke:'#ffffff','stroke-width':'0.22','stroke-opacity':'0.5','stroke-linecap':'round'}));
+  });
+
+  // foot-pads at the 4 rail ends
+  [[Lx1,Ly1],[Rx1,Ry1],[Lx2,Ly2],[Rx2,Ry2]].forEach(p=>{
+    svg.appendChild(svgNode('circle',{cx:p[0],cy:p[1],r:'0.7',fill:'#15803d','fill-opacity':'0.9'}));
+    svg.appendChild(svgNode('circle',{cx:p[0],cy:p[1],r:'0.34',fill:'#dcfce7','fill-opacity':'0.85'}));
+  });
+}
+
+// Wavy tapered ribbon snake (old-WebView safe: solid colors + *-opacity attrs)
+function drawSnake(svg, defs, head, tail, gid){
+  const dx=tail.x-head.x, dy=tail.y-head.y;
+  const L=Math.hypot(dx,dy)||1;
+  const ux=dx/L, uy=dy/L;
+  const nx=-uy, ny=ux;
+  const N=26;
+  const amp=Math.min(2.3, L*0.13);
+  const waves=1.6;
+
+  // wavy centerline (ends anchored via sine envelope)
+  const pts=[];
+  for(let i=0;i<=N;i++){
+    const s=i/N;
+    const along=s*L;
+    const env=Math.sin(s*Math.PI);
+    const lat=Math.sin(s*Math.PI*waves*2)*amp*env;
+    pts.push({x:head.x+ux*along+nx*lat, y:head.y+uy*along+ny*lat});
+  }
+
+  // offset outline with taper (thick head -> thin tail)
+  const headHalf=2.05, tailHalf=0.5;
+  const left=[], right=[];
+  for(let i=0;i<=N;i++){
+    const a=pts[Math.max(0,i-1)], b=pts[Math.min(N,i+1)];
+    let tx=b.x-a.x, ty=b.y-a.y;
+    const tl=Math.hypot(tx,ty)||1; tx/=tl; ty/=tl;
+    const px=-ty, py=tx;
+    const hw=headHalf+(tailHalf-headHalf)*(i/N);
+    left.push({x:pts[i].x+px*hw, y:pts[i].y+py*hw});
+    right.push({x:pts[i].x-px*hw, y:pts[i].y-py*hw});
+  }
+  let d='M '+left[0].x.toFixed(2)+' '+left[0].y.toFixed(2);
+  for(let i=1;i<=N;i++) d+=' L '+left[i].x.toFixed(2)+' '+left[i].y.toFixed(2);
+  for(let i=N;i>=0;i--) d+=' L '+right[i].x.toFixed(2)+' '+right[i].y.toFixed(2);
+  d+=' Z';
+  let cd='M '+pts[0].x.toFixed(2)+' '+pts[0].y.toFixed(2);
+  for(let i=1;i<=N;i++) cd+=' L '+pts[i].x.toFixed(2)+' '+pts[i].y.toFixed(2);
+
+  // body gradient (light -> crimson)
+  const g=svgNode('linearGradient',{id:'snk'+gid,gradientUnits:'userSpaceOnUse',x1:head.x,y1:head.y,x2:tail.x,y2:tail.y});
+  g.appendChild(svgNode('stop',{offset:'0','stop-color':'#fb7185'}));
+  g.appendChild(svgNode('stop',{offset:'0.55','stop-color':'#e11d48'}));
+  g.appendChild(svgNode('stop',{offset:'1','stop-color':'#9f1239'}));
+  defs.appendChild(g);
+
+  // glow underlay
+  svg.appendChild(svgNode('path',{d:cd,fill:'none',stroke:'#f43f5e','stroke-width':(headHalf*2+1.2).toFixed(2),'stroke-opacity':'0.16','stroke-linecap':'round','stroke-linejoin':'round'}));
+  // body fill + darker outline
+  svg.appendChild(svgNode('path',{d:d,fill:'url(#snk'+gid+')',stroke:'#7f1d1d','stroke-width':'0.32','stroke-opacity':'0.85','stroke-linejoin':'round'}));
+  // belly highlight
+  svg.appendChild(svgNode('path',{d:cd,fill:'none',stroke:'#fecdd3','stroke-width':'0.55','stroke-opacity':'0.45','stroke-linecap':'round','stroke-linejoin':'round'}));
+  // scale spots
+  const spots=5;
+  for(let i=1;i<=spots;i++){
+    const idx=Math.round((i/(spots+1))*N);
+    const p=pts[idx];
+    const r=Math.max(0.25, 0.62*(1-idx/N*0.6));
+    svg.appendChild(svgNode('circle',{cx:p.x.toFixed(2),cy:p.y.toFixed(2),r:r.toFixed(2),fill:'#881337','fill-opacity':'0.35'}));
+  }
+
+  // head (rotated group); local +x points toward body, so snout/eyes/tongue face -x (outward)
+  const ang=Math.atan2(pts[1].y-pts[0].y, pts[1].x-pts[0].x)*180/Math.PI;
+  const hg=svgNode('g',{transform:'translate('+head.x.toFixed(2)+','+head.y.toFixed(2)+') rotate('+ang.toFixed(1)+')'});
+  hg.appendChild(svgNode('ellipse',{cx:'-0.6',cy:'0',rx:'2.7',ry:'2.15',fill:'#e11d48',stroke:'#7f1d1d','stroke-width':'0.3','stroke-opacity':'0.85'}));
+  hg.appendChild(svgNode('ellipse',{cx:'-1.2',cy:'-0.8',rx:'1.0',ry:'0.5',fill:'#ffe4e6','fill-opacity':'0.35'}));
+  hg.appendChild(svgNode('circle',{cx:'-1.1',cy:'-0.95',r:'0.62',fill:'#ffffff'}));
+  hg.appendChild(svgNode('circle',{cx:'-1.1',cy:'0.95',r:'0.62',fill:'#ffffff'}));
+  hg.appendChild(svgNode('circle',{cx:'-1.45',cy:'-0.95',r:'0.3',fill:'#1a0a0a'}));
+  hg.appendChild(svgNode('circle',{cx:'-1.45',cy:'0.95',r:'0.3',fill:'#1a0a0a'}));
+  hg.appendChild(svgNode('circle',{cx:'-1.58',cy:'-1.08',r:'0.12',fill:'#ffffff'}));
+  hg.appendChild(svgNode('circle',{cx:'-1.58',cy:'0.82',r:'0.12',fill:'#ffffff'}));
+  hg.appendChild(svgNode('path',{d:'M -2.9 0 L -4.2 0 M -4.2 0 L -4.9 -0.5 M -4.2 0 L -4.9 0.5',fill:'none',stroke:'#ff1744','stroke-width':'0.28','stroke-linecap':'round'}));
+  svg.appendChild(hg);
+}
+
+function updateTokens(pos1, pos2){
+  document.querySelectorAll('.token').forEach(t=>t.remove());
+  if(pos1>0){
+    const cell=document.getElementById('cell-'+pos1);
+    if(cell){
+      const t=document.createElement('div');
+      t.className='token '+(pos2===pos1?'both':'p1');
+      t.textContent=pos2===pos1?'🎮':'';
+      cell.appendChild(t);
+    }
+  }
+  if(pos2>0 && pos2!==pos1){
+    const cell=document.getElementById('cell-'+pos2);
+    if(cell){
+      const t=document.createElement('div');
+      t.className='token p2';
+      t.textContent='';
+      cell.appendChild(t);
+    }
+  }
+  document.getElementById('p1Pos').textContent = pos1===0?'घर 🏠':`खाना ${pos1}`;
+  document.getElementById('p2Pos').textContent = pos2===0?'घर 🏠':`खाना ${pos2}`;
+}
+
+function addLog(msg){
+  const log=document.getElementById('gameLog');
+  const item=document.createElement('div');
+  item.className='log-item';
+  item.textContent=msg;
+  log.insertBefore(item,log.firstChild);
+  if(log.children.length>20) log.removeChild(log.lastChild);
+}
+
+function setDiceActive(active){
+  const dw=document.getElementById('diceWrap');
+  dw.classList.toggle('active',active);
+  dw.classList.toggle('disabled',!active);
+  document.getElementById('diceHint').textContent=active?'दबाओ':'...';
+}
+
+function showScreen(id){
+  ['homeScreen','waitingScreen','gameScreen','winScreen'].forEach(s=>{
+    document.getElementById(s).style.display='none';
+  });
+  document.getElementById(id).style.display='block';
+  document.getElementById('pgFooter').style.display=id==='gameScreen'?'none':'block';
+}
+
+// ── VS BOT ──
+window.startVsBot=function(){
+  gameMode='bot'; myRole='p1'; diceRolling=false;
+  buildBoard();
+  gameState={p1:0,p2:0,turn:'p1'};
+  document.getElementById('p1Name').textContent='आप 🟡';
+  document.getElementById('p2Name').textContent='कंप्यूटर 🤖';
+  updateTokens(0,0);
+  showScreen('gameScreen');
+  setDiceActive(true);
+  document.getElementById('turnText').textContent='आपकी बारी!';
+  document.getElementById('gameMsg').textContent='चलो शुरू! 🎲';
+  document.getElementById('gameLog').innerHTML='';
+};
+
+// ── DICE ──
+window.rollDice=function(){
+  if(diceRolling) return;
+  if(gameMode==='bot' && gameState.turn!=='p1') return;
+  if(gameMode==='friend' && !isMyTurn) return;
+  diceRolling=true;
+  setDiceActive(false);
+  const diceEl=document.getElementById('diceEmoji');
+  const dw=document.getElementById('diceWrap');
+  dw.classList.add('rolling');
+  let cnt=0;
+  const iv=setInterval(()=>{
+    diceEl.textContent=DICE_FACES[Math.floor(Math.random()*6)];
+    cnt++;
+    if(cnt>=9){
+      clearInterval(iv);
+      dw.classList.remove('rolling');
+      const roll=Math.floor(Math.random()*6)+1;
+      diceEl.textContent=DICE_FACES[roll-1];
+      processMove(roll);
+    }
+  },75);
+};
+
+function processMove(roll){
+  const turn=gameState.turn;
+  const isP1=turn==='p1';
+  const name=isP1?(gameMode==='bot'?'आप':'आप'):(gameMode==='bot'?'कंप्यूटर':'दोस्त');
+  let pos=isP1?gameState.p1:gameState.p2;
+  const msgEl=document.getElementById('gameMsg');
+  msgEl.className='gi-msg';
+  addLog(`${name} को ${roll} आया`);
+
+  if(pos+roll>100){
+    msgEl.textContent=`${roll} आया — आगे नहीं जा सकते!`;
+    setTimeout(()=>{ diceRolling=false; endTurn(); },900);
+    return;
+  }
+
+  pos+=roll;
+  let extraMsg='';
+
+  if(SNAKES[pos]){
+    extraMsg=`🐍 सांप ने काटा! ${pos} → ${SNAKES[pos]}`;
+    msgEl.className='gi-msg snake-msg';
+    pos=SNAKES[pos];
+    addLog(extraMsg);
+  } else if(LADDERS[pos]){
+    const oldPos=pos;
+    pos=LADDERS[pos];
+    extraMsg=`🪜 सीढ़ी मिली! ${oldPos} → ${pos}`;
+    msgEl.className='gi-msg ladder-msg';
+    addLog(extraMsg);
+  }
+  msgEl.textContent=extraMsg||`${name}: → खाना ${pos}`;
+
+  if(isP1) gameState.p1=pos;
+  else gameState.p2=pos;
+
+  if(gameMode==='friend' && roomRef){
+    update(roomRef,{
+      p1:gameState.p1, p2:gameState.p2,
+      turn:turn==='p1'?'p2':'p1',
+      lastMsg:msgEl.textContent
+    });
+  }
+
+  setTimeout(()=>{
+    updateTokens(gameState.p1, gameState.p2);
+    if(pos>=100) showWin(isP1);
+    else{ diceRolling=false; endTurn(); }
+  },550);
+}
+
+function endTurn(){
+  gameState.turn=gameState.turn==='p1'?'p2':'p1';
+  const myTurn=gameState.turn==='p1';
+  if(gameMode==='bot'){
+    if(myTurn){
+      document.getElementById('turnText').textContent='आपकी बारी!';
+      document.getElementById('gameMsg').textContent='पासा फेंको...';
+      document.getElementById('gameMsg').className='gi-msg';
+      setDiceActive(true);
+    } else {
+      document.getElementById('turnText').textContent='कंप्यूटर सोच रहा है…';
+      setTimeout(botMove, 1100);
+    }
+  } else {
+    isMyTurn=gameState.turn===myRole;
+    document.getElementById('turnText').textContent=isMyTurn?'आपकी बारी!':'दोस्त की बारी...';
+    if(isMyTurn){ document.getElementById('gameMsg').textContent='पासा फेंको...'; setDiceActive(true); }
+  }
+  // Update active player highlight
+  document.getElementById('p1Info').classList.toggle('active', gameState.turn==='p1');
+  document.getElementById('p2Info').classList.toggle('active', gameState.turn==='p2');
+}
+
+function botMove(){
+  const roll=Math.floor(Math.random()*6)+1;
+  document.getElementById('diceEmoji').textContent=DICE_FACES[roll-1];
+  document.getElementById('diceWrap').classList.add('rolling');
+  setTimeout(()=>{ document.getElementById('diceWrap').classList.remove('rolling'); processMove(roll); },500);
+}
+
+function showWin(isP1){
+  const won=isP1;
+  document.getElementById('winEmoji').textContent=won?'🏆':'😅';
+  document.getElementById('winTitle').textContent=won?'जीत गए! 🎉':'हार गए!';
+  document.getElementById('winSub').textContent=won?'वाह! क्या खेले!':'कंप्यूटर बड़ा होशियार निकला 😄 फिर कोशिश करो!';
+  if(gameMode==='friend' && roomRef) update(roomRef,{phase:'ended',winner:isP1?'p1':'p2'});
+  setTimeout(()=>showScreen('winScreen'),700);
+}
+
+window.playAgain=function(){
+  if(gameMode==='bot') startVsBot();
+  else{ hideFriendSection(); showScreen('homeScreen'); }
+};
+window.askExit=function(){ document.getElementById('exitModal').classList.add('show'); };
+window.closeExit=function(){ document.getElementById('exitModal').classList.remove('show'); };
+window.confirmExit=function(){
+  document.getElementById('exitModal').classList.remove('show');
+  if(gameUnsubscribe){ gameUnsubscribe(); gameUnsubscribe=null; }
+  if(roomRef){ remove(roomRef).catch(()=>{}); roomRef=null; }
+  roomCode=null; myRole=null; gameMode=null; isMyTurn=false; diceRolling=false;
+  gameState={p1:0,p2:0,turn:'p1'};
+  hideFriendSection();
+  showScreen('homeScreen');
+};
+window.shareWin=function(){
+  const msg='🏆 मैंने सांप सीढ़ी जीता!\n\nआप भी खेलो:\nhttps://game.vhoriginal.com';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+};
+
+// ── FRIEND MODE ──
+window.showFriendSection=function(){ document.getElementById('friendSection').style.display='block'; };
+window.hideFriendSection=function(){ document.getElementById('friendSection').style.display='none'; };
+function genCode(){ return Math.random().toString(36).substring(2,6).toUpperCase(); }
+function showFriendMsg(msg,type='info'){
+  const el=document.getElementById('friendMsg');
+  el.className='msg-box msg-'+type; el.textContent=msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none',4000);
+}
+
+window.createRoom=async function(){
+  const code=genCode();
+  roomCode=code; roomRef=ref(db,'rooms/'+code);
+  await set(roomRef,{p1:0,p2:0,turn:'p1',phase:'waiting',p1joined:true,p2joined:false,created:Date.now()});
+  myRole='p1';
+  document.getElementById('displayRoomCode').textContent=code;
+  showScreen('waitingScreen');
+  gameUnsubscribe=onValue(roomRef,(snap)=>{
+    const d=snap.val();
+    if(!d) return;
+    if(d.p2joined && d.phase==='playing'){ gameState={p1:0,p2:0,turn:'p1'}; startFriendGame(); }
+  });
+};
+
+window.joinRoom=async function(){
+  const code=document.getElementById('roomCodeInput').value.trim().toUpperCase();
+  if(!code||code.length!==4){showFriendMsg('सही 4 अक्षर का कोड डालो!','err');return;}
+  roomRef=ref(db,'rooms/'+code);
+  const snap=await get(roomRef);
+  if(!snap.exists()){showFriendMsg('Room नहीं मिला — कोड चेक करो!','err');return;}
+  const d=snap.val();
+  if(d.phase!=='waiting'){showFriendMsg('यह खेल पहले से शुरू हो चुका है!','err');return;}
+  roomCode=code; myRole='p2';
+  await update(roomRef,{p2joined:true,phase:'playing'});
+  gameState={p1:0,p2:0,turn:'p1'};
+  startFriendGame();
+};
+
+function startFriendGame(){
+  if(gameUnsubscribe) gameUnsubscribe();
+  diceRolling=false;
+  buildBoard();
+  document.getElementById('p1Name').textContent=myRole==='p1'?'आप 🟡':'दोस्त 🟡';
+  document.getElementById('p2Name').textContent=myRole==='p2'?'आप 🟣':'दोस्त 🟣';
+  isMyTurn=myRole==='p1';
+  updateTokens(0,0);
+  showScreen('gameScreen');
+  setDiceActive(isMyTurn);
+  document.getElementById('turnText').textContent=isMyTurn?'आपकी बारी!':'दोस्त की बारी...';
+  document.getElementById('gameMsg').textContent='चलो शुरू! 🎲';
+  document.getElementById('gameLog').innerHTML='';
+  gameUnsubscribe=onValue(roomRef,(snap)=>{
+    const d=snap.val();
+    if(!d) return;
+    if(d.phase==='ended'){
+      const won=(d.winner===myRole);
+      document.getElementById('winEmoji').textContent=won?'🏆':'😅';
+      document.getElementById('winTitle').textContent=won?'जीत गए! 🎉':'हार गए!';
+      document.getElementById('winSub').textContent=won?'वाह! क्या खेले!':'दोस्त ने जीता! अगली बार पक्का जीतोगे!';
+      setTimeout(()=>showScreen('winScreen'),500);
+      return;
+    }
+    gameState={p1:d.p1||0,p2:d.p2||0,turn:d.turn};
+    isMyTurn=d.turn===myRole;
+    updateTokens(gameState.p1,gameState.p2);
+    if(d.lastMsg) document.getElementById('gameMsg').textContent=d.lastMsg;
+    document.getElementById('turnText').textContent=isMyTurn?'आपकी बारी!':'दोस्त की बारी...';
+    document.getElementById('p1Info').classList.toggle('active',d.turn==='p1');
+    document.getElementById('p2Info').classList.toggle('active',d.turn==='p2');
+    setDiceActive(isMyTurn);
+    diceRolling=false;
+  });
+}
+
+window.cancelWaiting=function(){
+  if(gameUnsubscribe) gameUnsubscribe();
+  if(roomRef) remove(roomRef).catch(()=>{});
+  roomRef=null; roomCode=null;
+  showScreen('homeScreen');
+};
+window.shareRoom=function(){
+  const msg='🐍 सांप सीढ़ी खेलते हैं!\n\nRoom Code: *'+roomCode+'*\n\n👉 जुड़ो:\nhttps://game.vhoriginal.com';
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank');
+};
+
+// Init
+buildBoard();
+showScreen('homeScreen');
+</script>
+</body>
+</html>
